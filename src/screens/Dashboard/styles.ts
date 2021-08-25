@@ -1,13 +1,13 @@
 import styled from 'styled-components/native';
-import { Feather } from '@expo/vector-icons';
+import { FlatList } from 'react-native';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
+import { DataListProps } from './index';
+
 
 export const Container = styled.View`
     flex: 1;
     background-color: ${({ theme }) => theme.colors.background};
 `;
-
-
 
 export const HighlightCards = styled.ScrollView.attrs({
   horizontal: true,
@@ -33,6 +33,10 @@ font-family: ${({ theme }) => theme.fonts.regular};
 margin-bottom: 16px;
 `;
 
-export const TransactionList = styled.FlatList`
+export const TransactionList = styled(
+  FlatList as new () => FlatList<DataListProps>
+).attrs({
+  showsVerticalScrollIndicator: false
+})`
 
 `;
