@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, UserInfo, Photo, User, UserGreeting, UserName, UserWrapper, Icon } from './styles';
+import { Container, UserInfo, Photo, User, UserGreeting, UserName, UserWrapper, Icon, LogoutButton } from './styles';
 import { } from 'react-native';
 
 export function Header() {
@@ -15,7 +15,9 @@ export function Header() {
                         <UserName>Manoel</UserName>
                     </User>
                 </UserInfo>
-                <Icon name="power" />
+                <LogoutButton onPress={() => {}}>
+                    <Icon name="power" />
+                </LogoutButton>
             </UserWrapper>
         </Container>
     );
