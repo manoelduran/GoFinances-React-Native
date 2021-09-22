@@ -17,7 +17,7 @@ export function AppRoutes(){
             headerShown: false,
             tabBarStyle: {
               paddingVertical: Platform.OS === 'ios' ? 20 : 0,
-              height: 88
+              height: 50
             }
           }}
         >

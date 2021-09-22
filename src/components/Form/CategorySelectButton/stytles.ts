@@ -13,7 +13,7 @@ flex-direction: row;
 align-items: center;
 justify-content: space-between;
 `;
-export const Text = styled.Text`
+export const Category = styled.Text`
 font-family: ${({theme}) => theme.fonts.regular};
 font-size: ${RFValue(14)}px;
 color: ${({theme}) => theme.colors.text};

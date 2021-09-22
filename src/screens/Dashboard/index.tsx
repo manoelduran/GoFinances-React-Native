@@ -1,4 +1,6 @@
-import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Header } from '../../components/Header'
 import { HighlightCard } from '../../components/HighlightCard';
 import { TransactionCard, TransactionCardProps } from '../../components/TransactionCard';
@@ -9,41 +11,38 @@ export interface DataListProps extends TransactionCardProps {
 }
 
 export function Dashboard() {
-    const data: DataListProps[] = [
-        {
-            id: '1',
-            type: 'positive',
-            amount: "R$ 12.000,00",
-            title: "Desenvolvimento de site",
-            date: "13/04/2020",
-            category: {
-                name: "Vendas",
-                icon: "dollar-sign"
+    const [data, setData] = useState<DataListProps[]>([]);
+    async function getTransactions() {
+        const transactionsKye = '@gofinance:transactions';
+        const response = await AsyncStorage.getItem(transactionsKye);
+        const transactions = response ? JSON.parse(response) : [];
+        const transactionsFormatted: DataListProps[] = transactions.map((transaction: DataListProps) => {
+            const amount = Number(transaction.amount).toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            });
+            const date = Intl.DateTimeFormat('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: '2-digit'
+            }).format(new Date(transaction.date));
+            return {
+                id: transaction.id,
+                amount,
+                date,
+                name: transaction.name,
+                category: transaction.category,
+                type: transaction.type
             }
-        },
-        {
-            id: '2',
-            type: 'negative',
-            amount: "R$ 59,00",
-            title: "Hamburgueria Pizzy",
-            date: "10/04/2020",
-            category: {
-                name: "Alimentação",
-                icon: "coffee"
-            }
-        },
-        {
-            id: '3',
-            type: 'negative',
-            amount: "R$ 1.200,00",
-            title: "Aluguel do apartamento",
-            date: "22/03/2020",
-            category: {
-                name: "Casa",
-                icon: "shopping-bag"
-            }
-        },
-    ];
+        });
+        setData(transactionsFormatted);
+    };
+    useEffect(() => {
+        getTransactions()
+    }, []);
+    useFocusEffect(useCallback(() => {
+        getTransactions()
+    }, []))
     return (
         <Container>
             <Header />
@@ -71,7 +70,6 @@ export function Dashboard() {
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => <TransactionCard data={item} />}
                 />
-
             </Transactions>
         </Container>
 
