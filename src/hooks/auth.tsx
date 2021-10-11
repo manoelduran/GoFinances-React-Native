@@ -1,4 +1,4 @@
-import React, { useContext, createContext, ReactNode, useState } from 'react';
+import React, { useContext, createContext, ReactNode, useState, useEffect } from 'react';
 const { CLIENT_ID } = process.env;
 const { REDIRECT_URI } = process.env;
 import * as AuthSession from 'expo-auth-session';
@@ -17,6 +17,8 @@ interface IAuthContextData {
     user: User;
     signInWithGoogle(): Promise<void>;
     signInWithApple(): Promise<void>;
+    signOut(): Promise<void>;
+    userStorageLoading: boolean;
 }
 interface AuthorizationResponse {
     params: {
@@ -27,8 +29,9 @@ interface AuthorizationResponse {
 const AuthContext = createContext({} as IAuthContextData);
 
 function AuthProvider({ children }: AuthProviderProps) {
-    const [user, setUser] = useState<User>({} as User)
-
+    const [user, setUser] = useState<User>({} as User);
+    const userStorageKey = "@gofinances:user";
+    const [userStorageLoading, setUserStorageLoading] = useState(true);
     async function signInWithGoogle() {
         try {
             const RESPONSE_TYPE = 'token';
@@ -38,12 +41,14 @@ function AuthProvider({ children }: AuthProviderProps) {
             if (type === 'success') {
                 const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${params.access_token}`);
                 const userInfo = await response.json();
-                setUser({
+                const userLogged = {
                     id: userInfo.id,
                     email: userInfo.email,
                     name: userInfo.given_name,
-                    photo: userInfo.picture
-                });
+                    photo: userInfo.picture,
+                };
+                setUser(userLogged);
+                await AsyncStorage.setItem(userStorageKey, JSON.stringify(userLogged));
             }
         } catch (error) {
             throw new Error(error);
@@ -58,22 +63,40 @@ function AuthProvider({ children }: AuthProviderProps) {
                 ]
             });
             if (credential) {
+                const name = credential.fullName!.givenName!;
+                const photo = `https://ui-avatars.com/api/?name=${name}&length=1`;
                 const userLogged = {
                     id: String(credential.user),
                     email: credential.email!,
-                    name: credential.fullName!.givenName!,
-                    photo: undefined
+                    name,
+                    photo,
                 };
                 setUser(userLogged);
-                await AsyncStorage.setItem('@gofinances:user', JSON.stringify(userLogged));
+                await AsyncStorage.setItem(userStorageKey, JSON.stringify(userLogged));
             }
         } catch (error) {
             throw new Error(error)
         }
     }
 
+    async function signOut(){
+        setUser({} as User);
+        await AsyncStorage.removeItem(userStorageKey)
+
+    }
+    useEffect(() => {
+        async function loadUserStorageDate() {
+            const userStoraged = await AsyncStorage.getItem(userStorageKey);
+            if (userStoraged) {
+                const userLogged = JSON.parse(userStoraged) as User;
+                setUser(userLogged)
+            };
+            setUserStorageLoading(false);
+        };
+        loadUserStorageDate()
+    }, [])
     return (
-        <AuthContext.Provider value={{ user, signInWithGoogle, signInWithApple }}>
+        <AuthContext.Provider value={{ user, signInWithGoogle, signInWithApple, userStorageLoading, signOut }}>
             {children}
         </AuthContext.Provider>
     )
