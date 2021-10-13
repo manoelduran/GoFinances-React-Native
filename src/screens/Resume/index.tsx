@@ -11,6 +11,7 @@ import { ptBR } from 'date-fns/locale';
 import { useTheme } from 'styled-components';
 import { categories } from '../../utils/categories';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useAuth } from '../../hooks/auth';
 
 interface TransactionData {
     type: 'positive' | 'negative';
@@ -32,6 +33,7 @@ export function Resume() {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [totalByCategories, setTotalByCategories] = useState<TotalByCategory[]>([]);
+    const {user} = useAuth();
     const theme = useTheme();
     function handleDateChange(action: 'next' | 'prev') {
         if (action === 'next') {
@@ -40,7 +42,7 @@ export function Resume() {
             setSelectedDate(subMonths(selectedDate, 1));
         }
     };
-    const transactionsKye = '@gofinance:transactions';
+    const transactionsKye = `@gofinance:transactions_user:${user.id}`
     async function LoadTransactions() {
         setIsLoading(true);
         const transactions = await AsyncStorage.getItem(transactionsKye);

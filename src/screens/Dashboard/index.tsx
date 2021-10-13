@@ -7,6 +7,7 @@ import { HighlightCard } from '../../components/HighlightCard';
 import { useTheme } from 'styled-components';
 import { TransactionCard, TransactionCardProps } from '../../components/TransactionCard';
 import { Container, HighlightCards, Transactions, Title, TransactionList, LoadContainer } from './styles';
+import { useAuth } from '../../hooks/auth';
 
 export interface DataListProps extends TransactionCardProps {
     id: string;
@@ -27,16 +28,19 @@ export function Dashboard() {
     const [transactions, setTransactions] = useState<DataListProps[]>([]);
     const [highlightData, setHighLightData] = useState<HighLightData>({} as HighLightData);
     const [isLoading, setIsLoading] = useState(true);
+    const { user } = useAuth();
     const theme = useTheme();
 
     function getLastTransactionDate(
         collection: DataListProps[],
         type: 'positive' | 'negative'
     ) {
+        const collectionFilttered = collection.filter(transaction => transaction.type === type);
+        if (collectionFilttered.length === 0) {
+            return "0"
+        }
         const lastTransaction = new Date(
-            Math.max.apply(Math, collection
-                .filter(transaction => transaction.type === type)
-                .map(transaction => new Date(transaction.date).getTime())))
+            Math.max.apply(Math, collectionFilttered.map(transaction => new Date(transaction.date).getTime())))
 
         return `${lastTransaction.getDate()} de ${lastTransaction.toLocaleString('pt-BR', {
             month: 'long'
@@ -44,7 +48,7 @@ export function Dashboard() {
     }
 
     async function getTransactions() {
-        const transactionsKye = '@gofinance:transactions';
+        const transactionsKye = `@gofinance:transactions_user:${user.id}`
         const response = await AsyncStorage.getItem(transactionsKye);
         const transactions = response ? JSON.parse(response) : [];
         let entriesTotal = 0;
@@ -76,7 +80,9 @@ export function Dashboard() {
         setTransactions(transactionsFormatted);
         const lastTransactionEntries = getLastTransactionDate(transactions, 'positive');
         const lastTransactionExpensives = getLastTransactionDate(transactions, 'negative');
-        const totalInterval = `01 a ${lastTransactionExpensives}`
+        const totalInterval = lastTransactionExpensives === "0"
+         ? 'Não há transações' 
+         : `01 a ${lastTransactionExpensives}`;
         const total = entriesTotal - expensiveTotal;
         setHighLightData({
             entries: {
@@ -84,14 +90,18 @@ export function Dashboard() {
                     style: 'currency',
                     currency: 'BRL'
                 }),
-                lastTransaction: `Última entrada dia ${lastTransactionEntries}`
+                lastTransaction: lastTransactionEntries === "0"
+                    ? 'Não há transações'
+                    : `Última entrada dia ${lastTransactionEntries}`
             },
             expensive: {
                 amount: expensiveTotal.toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL'
                 }),
-                lastTransaction: `Última entrada dia ${lastTransactionExpensives}`
+                lastTransaction: lastTransactionExpensives === "0"
+                    ? 'Não há transações'
+                    : `Última entrada dia ${lastTransactionExpensives}`
             },
             total: {
                 amount: total.toLocaleString('pt-BR', {
@@ -124,7 +134,7 @@ export function Dashboard() {
                             type="up"
                             title="Entradas"
                             amount={highlightData.entries.amount}
-                            lastTransaction={highlightData.entries.lastTransaction}/>
+                            lastTransaction={highlightData.entries.lastTransaction} />
                         <HighlightCard
                             type="down"
                             title="Saídas"
