@@ -25,6 +25,9 @@ interface FormData {
     name: string;
     amount: string;
 }
+interface NavigationProps {
+    navigate: (screen: string) => void
+  }
 
 const schema = Yup.object().shape({
     name: Yup
@@ -46,7 +49,7 @@ export function Register() {
         key: 'category',
         name: 'Categoria',
     });
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProps>();
     const {
         control,
         reset,
@@ -129,14 +132,14 @@ export function Register() {
                             <TransactionTypeButton type="up" title="Income" isActive={isSelectedType === "positive"} onPress={() => handleSelectedType('positive')} />
                             <TransactionTypeButton type="down" title="Outcome" isActive={isSelectedType === "negative"} onPress={() => handleSelectedType('negative')} />
                         </TransactionsButton>
-                        <CategorySelectButton title={category.name} onPress={handleModalOpen} />
+                        <CategorySelectButton testID={'category-button'} title={category.name} onPress={handleModalOpen} />
                     </Fields>
                     <Button
                         title="Enviar"
                         onPress={handleSubmit(handleRegister)}
                     />
                 </Form>
-                <Modal visible={isModalVisible}>
+                <Modal testID={'modal-category'} visible={isModalVisible}>
                     <CategorySelect
                         category={category}
                         setCategory={setCategory}
