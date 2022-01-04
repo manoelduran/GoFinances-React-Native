@@ -44,7 +44,6 @@ export function Register() {
     const {user} = useAuth();
     const [isSelectedType, setIsSelectedType] = useState('');
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const transactionsKye = `@gofinance:transactions_user:${user.id}`
     const [category, setCategory] = useState({
         key: 'category',
         name: 'Categoria',
@@ -84,6 +83,7 @@ export function Register() {
             date: new Date()
         };
         try {
+            const transactionsKye = `@gofinance:transactions_user:${user.id}`
             const transactions = await AsyncStorage.getItem(transactionsKye);
             const currentTransactions = transactions ? JSON.parse(transactions) : [];
             const transactionsFormatted = [
@@ -132,14 +132,14 @@ export function Register() {
                             <TransactionTypeButton type="up" title="Income" isActive={isSelectedType === "positive"} onPress={() => handleSelectedType('positive')} />
                             <TransactionTypeButton type="down" title="Outcome" isActive={isSelectedType === "negative"} onPress={() => handleSelectedType('negative')} />
                         </TransactionsButton>
-                        <CategorySelectButton testID={'category-button'} title={category.name} onPress={handleModalOpen} />
+                        <CategorySelectButton testID='button-category' title={category.name} onPress={handleModalOpen} />
                     </Fields>
                     <Button
                         title="Enviar"
                         onPress={handleSubmit(handleRegister)}
                     />
                 </Form>
-                <Modal testID={'modal-category'} visible={isModalVisible}>
+                <Modal testID='modal-category' visible={isModalVisible}>
                     <CategorySelect
                         category={category}
                         setCategory={setCategory}

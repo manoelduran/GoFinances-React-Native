@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -130,6 +130,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -137,18 +148,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -171,12 +171,12 @@ interface CategorySelectProps{
   setCategory: (category: Category) =&gt; void;
   closeSelectCategory: () =&gt; void;
 }
-export function <span class="fstat-no" title="function not covered" >CategorySelect(</span>{category, setCategory, closeSelectCategory}: CategorySelectProps){
+export function CategorySelect({category, setCategory, closeSelectCategory}: CategorySelectProps){
 &nbsp;
     function <span class="fstat-no" title="function not covered" >handleSelectedCategory(</span>category: Category){
 <span class="cstat-no" title="statement not covered" >        setCategory(category)</span>
     }
-<span class="cstat-no" title="statement not covered" >return (</span>
+return (
     &lt;Container&gt;
         &lt;Header&gt;
             &lt;Title&gt;Categoria&lt;/Title&gt;
@@ -184,9 +184,9 @@ export function <span class="fstat-no" title="function not covered" >CategorySel
         &lt;FlatList
         data={categories}
         style={{flex: 1, width: '100%'}}
-        keyExtractor={(<span class="fstat-no" title="function not covered" >it</span>em =&gt; <span class="cstat-no" title="statement not covered" >item.key)</span>}
-        renderItem={<span class="fstat-no" title="function not covered" >({</span>item}) =&gt; (
-<span class="cstat-no" title="statement not covered" >            &lt;Category</span>
+        keyExtractor={(item =&gt; item.key)}
+        renderItem={({item}) =&gt; (
+            &lt;Category
             onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >handleSelectedCategory(item)}</span>
             isActive={category.key === item.key}
             &gt;
@@ -194,7 +194,7 @@ export function <span class="fstat-no" title="function not covered" >CategorySel
                 &lt;Name&gt;{item.name}&lt;/Name&gt;
             &lt;/Category&gt;
         )}
-        ItemSeparatorComponent={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >&lt;Separator/&gt;}</span>
+        ItemSeparatorComponent={() =&gt; &lt;Separator/&gt;}
         /&gt;
         &lt;Footer&gt;
         &lt;Button title="Selecionar" onPress={closeSelectCategory}/&gt;
@@ -208,7 +208,7 @@ export function <span class="fstat-no" title="function not covered" >CategorySel
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at Tue Jan 04 2022 14:32:03 GMT-0300 (Brasilia Standard Time)
+                at Tue Jan 04 2022 14:42:00 GMT-0300 (Brasilia Standard Time)
             </div>
         <script src="../../prettify.js"></script>
         <script>
