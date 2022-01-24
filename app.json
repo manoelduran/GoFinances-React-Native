@@ -1,13 +1,23 @@
 {
   "expo": {
     "name": "gofinances",
+    "icon": "./assets/logo.png",
     "slug": "gofinances",
     "scheme": "gofinances",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
     ],
-    "description": ""
+    "description": "",
+    "ios": {
+      "bundleIdentifier": "com.gofinances",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.gofinances",
+      "versionCode": 1
+    }
   },
-  "name": "gofinances"
+  "name": "gofinances",
+  "displayName": "gofinances"
 }

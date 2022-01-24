@@ -1,5 +1,4 @@
 import React from 'react';
-import { RectButtonProps} from 'react-native-gesture-handler'
 import { Container, Icon, Title, Button } from './styles';
 
 const icons = {
@@ -7,7 +6,7 @@ const icons = {
     down: 'arrow-down-circle'
 }
 
-interface TransactionTypeButtonProps extends RectButtonProps {
+interface TransactionTypeButtonProps  {
     type: 'up' | 'down';
     title: string;
     isActive : boolean;

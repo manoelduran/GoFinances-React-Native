@@ -48,7 +48,7 @@ font-size: ${RFValue(18)}px;
 font-family: ${({ theme }) => theme.fonts.bold};
 `;
 
-export const LogoutButton = styled(BorderlessButton)`
+export const LogoutButton = styled.TouchableOpacity`
 
 `;
 
